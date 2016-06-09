@@ -158,7 +158,7 @@ implements Listener
                 }
             }
         }
-        Parcelle parcelle = parcelleManager.getParcelle(player.getLocation());
+        Parcelle parcelle = parcelleManager.getParcelle(loc);
         if (parcelle != null && player.getItemInHand().getTypeId() == 269)
         {
             player.sendMessage(formatMsg.format("<dark_red>Vous êtes sur une parcelle protégée : " + parcelle.getName()));

@@ -96,8 +96,8 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
             p = player;
             
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getDisplayName() + " times 10 80 10");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getDisplayName() + " subtitle {text:\"Inscrivez vous sur notre forum \",color:green,extra:[{text:\" http://Craft.Teraoctet.net\",color:yellow}]}");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getDisplayName() + " title {text:\"Bienvenue sur\",color:green,extra:[{text:\" Craft.Teraoctet\",color:yellow}]}");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getDisplayName() + " subtitle {\"text\":\"Inscrivez vous sur notre forum \",\"color\":\"green\",\"extra\":[{\"text\":\" http://Craft.Teraoctet.net\",\"color\":\"yellow\"}]}");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player.getDisplayName() + " title {\"text\":\"Bienvenue sur\",\"color\":\"green\",\"extra\":[{\"text\":\" Craft.Teraoctet\",\"color\":\"yellow\"}]}");
                             
             conf.setStringYAML("player.yml", player.getDisplayName() + ".uuid" , player.getUniqueId().toString());
             conf.setStringYAML("player.yml", player.getDisplayName() + ".ip" , player.getAddress().toString());
@@ -692,8 +692,8 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
         public void onPlayerAchievementEvent(PlayerAchievementAwardedEvent event)
         {
             Player player = event.getPlayer();
-            PermissionUser user = PermissionsEx.getUser(player);
-            String world = null;
+            //PermissionUser user = PermissionsEx.getUser(player);
+            //String world = null;
 
             if(conf.getBooleanYAML("config.yml", "promotionActif",false)== false)return;
                         
@@ -703,15 +703,18 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
             {
                 player.sendMessage(Iris.formatMsg.format(conf.getStringYAML("config.yml", event.getAchievement().name() + ".message","<gold>F<e_ai>licitation <player> ! ton succ<e_gr>s te permet de monter en grade !"),player));
                 
-                String worldName = conf.getStringYAML("config.yml", event.getAchievement().name() + ".world","NULL");
-                if("NULL".equals(worldName))
-                {                
-                    ru.tehkode.permissions.bukkit.PermissionsEx.getUser(player).addGroup(group);
+                List<String> list = plugin.getConfig().getStringList(event.getAchievement().name() + ".world");
+                if(!list.isEmpty()){
+                    for (String w : list)
+                    {
+                        ru.tehkode.permissions.bukkit.PermissionsEx.getUser(player).addGroup(group,w);
+                    }
                 }
                 else
                 {
-                    ru.tehkode.permissions.bukkit.PermissionsEx.getUser(player).addGroup(group,worldName);
+                    ru.tehkode.permissions.bukkit.PermissionsEx.getUser(player).addGroup(group);
                 }
+                
                 ItemStack item = new ItemStack(Material.valueOf(conf.getStringYAML("config.yml", event.getAchievement().name() + ".items","AIR")));
                 player.getInventory().addItem(item);
                 player.updateInventory();
@@ -739,8 +742,9 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
                 {
                     if (player.getItemInHand().getItemMeta().getDisplayName().contains("Zeus"))
                     {
-                        doThrow((Fireball)p.launchProjectile(Fireball.class));
-                        this.lastTimes.put(p, System.currentTimeMillis());
+                        //doThrow((Fireball)player.launchProjectile(Fireball.class));
+                        //this.lastTimes.put(player, System.currentTimeMillis());
+                        player.sendMessage("Bouuuuum .... ffffff");
                     }
                 // Creates a bolt of lightning at a given location. In this case, that location is where the player is looking.
                 // Can only create lightning up to 200 blocks away.
@@ -760,9 +764,9 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
             }
         }
                 
-        @EventHandler(priority=EventPriority.NORMAL)
-        public void onProjectileHit(ProjectileHitEvent e) 
-        {
+        //@EventHandler(priority=EventPriority.NORMAL)
+        //public void onProjectileHit(ProjectileHitEvent e) 
+        //{
             /*Bukkit.broadcastMessage(e.getEntity().getType().getName());
             if (((e.getEntity() instanceof Arrow)) && 
               ((((Arrow)e.getEntity()).getShooter() instanceof Dispenser))) 
@@ -775,7 +779,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
                     theArrow.remove();
                 //}
             }*/
-        }
+        //}
                 
         @EventHandler
         public void onPlayerRespawn(PlayerRespawnEvent event) 

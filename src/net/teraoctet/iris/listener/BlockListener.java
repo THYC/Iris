@@ -420,8 +420,8 @@ implements Listener
         {
             if (event.getIgnitingEntity().getType() == EntityType.PLAYER)
             {
-                Bukkit.getConsoleSender().sendMessage(formatMsg.format("<aqua>[Iris] PYRO :" + event.getIgnitingEntity().getUniqueId().toString()));
-                conf.setStringYAML("player.yml", event.getIgnitingEntity().getUniqueId().toString() , event.getIgnitingEntity().getLocation().toString());
+                Bukkit.getConsoleSender().sendMessage(formatMsg.format("<aqua>[Iris] PYRO :" + event.getIgnitingEntity().getUniqueId().toString() + "-" + event.getIgnitingEntity().getLocation().toString()));
+                conf.setStringYAML("player.yml", "PYRO",event.getIgnitingEntity().getUniqueId().toString() , event.getIgnitingEntity().getLocation().toString());
             }
         }
     }

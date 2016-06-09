@@ -154,7 +154,7 @@ public class GraveListener
                 grave.addItem(new ItemStack[] { item });
             }
         }
-        grave.addItem(player.getEquipment().getArmorContents());
+        //grave.addItem(player.getEquipment().getArmorContents());
         players_inventory.clear();
         player.getEquipment().clear();
     }
