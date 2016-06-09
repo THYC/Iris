@@ -1021,13 +1021,13 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
             }
         }
         
-        @EventHandler
-        public void onPotionSplash(PotionSplashEvent event)
-        {
+        //@EventHandler
+        //public void onPotionSplash(PotionSplashEvent event)
+        //{
             //Bukkit.getConsoleSender().sendMessage(formatMsg.format("<aqua>[Iris]" + event.getAffectedEntities()));
-        }
+        //}
         
-        @EventHandler//Stops placement of lava
+        /*@EventHandler//Stops placement of lava
         public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) 
         {
             Player player = event.getPlayer();
@@ -1040,9 +1040,9 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
                 event.setCancelled(true);
                 player.sendMessage(formatMsg.format("<red>La lave est desactive !"));
             }
-        }
+        }*/
 
-        @EventHandler //Stops lava pickup
+        /*@EventHandler //Stops lava pickup
         public void onPlayerBucketFill(PlayerBucketFillEvent event) 
         {
             Player player = event.getPlayer();
@@ -1061,7 +1061,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
                 event.setCancelled(true);
                 player.sendMessage(formatMsg.format("<red>La lave est desactive !"));
             }
-        }
+        }*/
     }
 
 

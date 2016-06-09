@@ -113,7 +113,7 @@ implements Listener
         }
     }
   
-    @EventHandler(priority=EventPriority.HIGH)
+    /*@EventHandler(priority=EventPriority.HIGH)
     public void pvp(EntityDamageByEntityEvent e)
     {
         if (((e.getDamager() instanceof Player)) && ((e.getEntity() instanceof Player)))
@@ -132,7 +132,7 @@ implements Listener
                 if(player instanceof org.bukkit.entity.Player) e.setCancelled(true);
             }
         }
-    }
+    }*/
     
     @EventHandler(priority=EventPriority.NORMAL)
     public void onPlayerChangeWorld(PlayerChangedWorldEvent event) throws SQLException
