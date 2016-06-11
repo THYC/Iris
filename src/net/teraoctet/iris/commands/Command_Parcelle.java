@@ -40,6 +40,7 @@ implements CommandExecutor
                     player.sendMessage(formatMsg.format("<gray>-<green>/parcelle msg <yellow>[votre message ...] <gray>Enregistre le message d'accueil"));
                     player.sendMessage(formatMsg.format("<gray>-<green>/parcelle msg <gray>Affiche le message d'accueil actuel"));
                     player.sendMessage(formatMsg.format("<gray>-<green>/parcelle addplayer <yellow>[Joueur] <gray>Ajoute les droits d'un joueur à la parcelle"));
+                    player.sendMessage(formatMsg.format("<gray>-<green>/parcelle delplayer <yellow>[parcelle] [Joueur] <gray>Supprime les droits d'un joueur à la parcelle"));
                     player.sendMessage(formatMsg.format("<gray>-<green>/parcelle flag <yellow>[NomParcelle] <gray>Affiche la valeur des flags pour cette parcelle"));
                     player.sendMessage(formatMsg.format("<gray>-<green>/parcelle flag <yellow>[NomParcelle] <green>noenter <yellow>[0|1] <gray>1 = Les joueurs 'default' ne peuvent entrer"));
                     return true;
@@ -167,6 +168,36 @@ implements CommandExecutor
                 {
                     player.sendMessage(formatMsg.format("<gray>principe: -<green>/parcelle add <yellow>[NomDeParcelle]"));
                     return true;
+                }
+            }
+            if(args[0].equalsIgnoreCase("delplayer") && player.hasPermission("iris.parcelle.delplayer"))
+            {
+                if(args.length == 3)
+                {
+                    String name = args[1];
+                    if (parcelleManager.hasParcelle(name) == true)
+                    {
+                        if(parcelleManager.getParcelleOwner(name).contains(player.getUniqueId().toString()) || player.isOp())
+                        {    
+                        
+                            String sqlMember = "DELETE FROM irisparcellemember WHERE parcelleName = '" + args[1] + "' AND playerName = '" + args[2] + "'";
+
+                            ConMySQL.executeUpdate(sqlMember);
+
+                            player.sendMessage(Iris.formatMsg.format("<green>Habitant : <yellow>" + args[2] + " supprim<e_ai>e"));
+                            Iris.parcelleManager.loadParcelle();
+                        }
+                        else
+                        {
+                            player.sendMessage(formatMsg.format("<red>Vous n'êtes pas le propriétaire de cette parcelle"));
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        player.sendMessage(formatMsg.format("<red>Aucune parcelle enregistr<e_ai> sur ce nom"));
+                        return true;
+                    }
                 }
             }
             if(args[0].equalsIgnoreCase("del") && player.hasPermission("iris.parcelle.del"))
@@ -301,7 +332,7 @@ implements CommandExecutor
                     return true;
                 }
             }
-            if(args[0].equalsIgnoreCase("msg") && (player.hasPermission("iris.parcelle.message") || player.isOp()))
+            if((args[0].equalsIgnoreCase("msg") && (player.hasPermission("iris.parcelle.message")) || player.isOp()))
             {
                 if(args.length > 1)
                 {

@@ -28,8 +28,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Dispenser;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Entity;
@@ -273,7 +275,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
             }
         }
         
-        @EventHandler(priority=EventPriority.LOWEST)
+        /*@EventHandler(priority=EventPriority.LOWEST)
         public void onBookDrop(PlayerDropItemEvent e)
         {
             Player player = e.getPlayer();
@@ -295,7 +297,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
                     }
                 }
             }
-        }
+        }*/
         
         @EventHandler
         public void onPlayerQuit(PlayerQuitEvent event) 
@@ -764,22 +766,26 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
             }
         }
                 
-        //@EventHandler(priority=EventPriority.NORMAL)
-        //public void onProjectileHit(ProjectileHitEvent e) 
-        //{
-            /*Bukkit.broadcastMessage(e.getEntity().getType().getName());
+        /*@EventHandler(priority=EventPriority.NORMAL)
+        public void onProjectileHit(ProjectileHitEvent e) 
+        {
+            //Bukkit.broadcastMessage(e.getEntity().getType().getName());
             if (((e.getEntity() instanceof Arrow)) && 
-              ((((Arrow)e.getEntity()).getShooter() instanceof Dispenser))) 
+              ((((Arrow)e.getEntity()).getShooter() instanceof Player))) 
             {
-                Dispenser theShooter = (Dispenser)((Arrow)e.getEntity()).getShooter();
+                Player theShooter = (Player)((Arrow)e.getEntity()).getShooter();
                 Entity theArrow = (Arrow)e.getEntity();
                 //if (ExplosionBow.Explosionbow.containsKey(theShooter.getName())) 
                 //{
-                    theArrow.getWorld().createExplosion(theArrow.getLocation(), 5.0F);
+                if(theShooter.getName().equalsIgnoreCase("thyc82")){
+                    //Entity ent = theArrow.getLocation().
+                    theArrow.getWorld().createExplosion(theArrow.getLocation(), 10.0F);
                     theArrow.remove();
+                    
+                }
                 //}
-            }*/
-        //}
+            }
+        }*/
                 
         @EventHandler
         public void onPlayerRespawn(PlayerRespawnEvent event) 

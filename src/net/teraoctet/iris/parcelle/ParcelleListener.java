@@ -685,6 +685,91 @@ implements Listener
             }
         }
     }
+    
+    @EventHandler(priority=EventPriority.NORMAL)
+    public void onAnimalDamageParcelle(EntityDamageByEntityEvent event) 
+    {
+        Player player;
+        Parcelle parcelle = parcelleManager.getParcelle(event.getEntity().getLocation());
+
+        if (parcelle != null)
+        {
+            if(event.getEntity() instanceof org.bukkit.entity.Animals)
+            {     
+                if(event.getDamager() instanceof org.bukkit.entity.Arrow)
+                {
+                    player = (Player)((Arrow)event.getDamager()).getShooter();
+                    if(player == null) return;                    
+                    if (!parcelle.getuuidAllowed().contains(player.getUniqueId().toString()))
+                    {
+                        player.sendMessage(formatMsg.format("<light_purple>Tu ne peux pas tuer d'animaux ici, tu es sur un territoire ennemi"));
+                        event.setCancelled(true);
+                    }
+                }
+                if(event.getDamager() instanceof org.bukkit.entity.Projectile)
+                {
+                    if (((Projectile)event.getDamager()).getShooter() instanceof Player) 
+                    {
+                        player = (Player)((Projectile)event.getDamager()).getShooter();
+                        if(player == null) return;
+                        if (!parcelle.getuuidAllowed().contains(player.getUniqueId().toString()))
+                        {
+                            player.sendMessage(formatMsg.format("<light_purple>Tu ne peux pas tuer d'animaux ici, tu es sur un territoire ennemi"));
+                            event.setCancelled(true);
+                        }
+                    }
+                }
+                if(event.getDamager() instanceof org.bukkit.entity.Player)
+                {
+                    player = (Player)((Player)event.getDamager());
+                    if(player == null) return;
+                    if (!parcelle.getuuidAllowed().contains(player.getUniqueId().toString()))
+                    {
+                        player.sendMessage(formatMsg.format("<light_purple>Tu ne peux pas tuer d'animaux ici, tu es sur un territoire ennemi"));
+                        event.setCancelled(true);
+                    }
+                }
+
+            }
+            if(event.getEntity() instanceof org.bukkit.entity.Villager)
+            {     
+
+                if(event.getDamager() instanceof org.bukkit.entity.Arrow)
+                {
+                    player = (Player)((Arrow)event.getDamager()).getShooter();
+                    if(player == null) return;
+                    if (!parcelle.getuuidAllowed().contains(player.getUniqueId().toString()))
+                    {
+                        player.sendMessage(formatMsg.format("<light_purple>Tu ne peux pas tuer de villageois ici, tu es sur un territoire ennemi"));
+                        player.setHealth(1);
+                        event.setCancelled(true);
+                    }
+                }
+                if(event.getDamager() instanceof org.bukkit.entity.Projectile)
+                {
+                    player = (Player)((Projectile)event.getDamager()).getShooter();
+                    if(player == null) return;
+                    if (!parcelle.getuuidAllowed().contains(player.getUniqueId().toString()))
+                    {
+                        player.sendMessage(formatMsg.format("<light_purple>Tu ne peux pas tuer de villageois ici, tu es sur un territoire ennemi"));
+                        player.setHealth(1);
+                        event.setCancelled(true);
+                    }
+                }
+                if(event.getDamager() instanceof org.bukkit.entity.Player)
+                {
+                    player = (Player)((Player)event.getDamager());
+                    if(player == null) return;
+                    if (!parcelle.getuuidAllowed().contains(player.getUniqueId().toString()))
+                    {
+                        player.sendMessage(formatMsg.format("<light_purple>Tu ne peux pas tuer de villageois ici, tu es sur un territoire ennemi"));
+                        player.setHealth(1);
+                        event.setCancelled(true);
+                    }
+                }
+            }
+        }
+    }
         
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event)
@@ -737,6 +822,12 @@ implements Listener
                 if(event.getDamager() instanceof org.bukkit.entity.Player)
                 {
                     player = (Player)((Player)event.getDamager());
+                    if(player == null) return;
+                    event.setCancelled(true);
+                }
+                if(event.getDamager() instanceof org.bukkit.entity.Arrow)
+                {
+                    player = (Player)((Arrow)event.getDamager()).getShooter();
                     if(player == null) return;
                     event.setCancelled(true);
                 }

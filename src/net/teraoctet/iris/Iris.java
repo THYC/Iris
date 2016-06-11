@@ -218,7 +218,7 @@ implements Listener
         }
         WorldPVP = conf.getStringYAML("config.yml", "HordePVP", "NULL");
         MultiWorld.loadws();
-        Bukkit.getConsoleSender().sendMessage(formatMsg.format("<green>[Iris] Spigot.1.9.X"));
+        Bukkit.getConsoleSender().sendMessage(formatMsg.format("<green>[Iris] Spigot.1.10.X"));
     }
     
     public void reloadMessage()

@@ -8,9 +8,11 @@ import org.bukkit.Bukkit;
 import static org.bukkit.Bukkit.createInventory;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import static org.bukkit.Material.BEDROCK;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,6 +23,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class GraveListener
   implements Listener
@@ -56,8 +59,9 @@ public class GraveListener
             location = controlBlock(location);
             World newBlock = location.getWorld();
             final Block nb = newBlock.getBlockAt(location);
+            final Block nb2 = nb.getRelative(0, 1, 0);
                            
-            if (nb.isLiquid())
+            /*if (nb.isLiquid())
             {
                 player.sendMessage(formatMsg.format(conf.getStringYAML("messages.yml", "graveOnLiquid"),player));
                 return;
@@ -67,13 +71,14 @@ public class GraveListener
             {
                 player.sendMessage(formatMsg.format(conf.getStringYAML("messages.yml", "graveOnFlying"),player));
                 return;
-            }
+            }*/
             
             player.sendMessage(formatMsg.format(conf.getStringYAML("messages.yml", "graveSpawn"),player));
+            player.sendMessage(formatMsg.format("<aqua>Trouve ta tombe represente par un block de bedrock et fait un click droit dessus pour reprendre ton stuff"));
             
             try
             {
-                nb.setType(Material.SIGN_POST);            
+                /*nb.setType(Material.SIGN_POST);            
                 String playerName = player.getName();
                 Sign sign = (Sign)nb.getState();
 
@@ -84,13 +89,26 @@ public class GraveListener
                 sign.setLine(1, playerName);
                 sign.setLine(2, Line3);
                 sign.setLine(3, Line4);
+                sign.update();*/
+                
+                nb.setType(Material.BEDROCK);            
+                nb2.setType(Material.SIGN_POST);            
+                String playerName = player.getName();
+                Sign sign = (Sign)nb2.getState();
+
+                String Line1 = formatMsg.format(conf.getStringYAML("messages.yml", "graveLine1"), player);
+                String Line3 = formatMsg.format(conf.getStringYAML("messages.yml", "graveLine3"), player);
+                String Line4 = formatMsg.format(conf.getStringYAML("messages.yml", "graveLine4"), player);
+                sign.setLine(0, Line1);
+                sign.setLine(1, playerName);
+                sign.setLine(2, Line3);
+                sign.setLine(3, Line4);
                 sign.update();
-
-
+                
                 /* création inventaire */
                 Inventory grave = createInventory(null, 54, "Tombe de " + NomDuJoueur);
                 putInventoryInChests(player,grave);
-                chest invent = new chest(grave,player.getName(),rint(sign.getX()),rint(sign.getZ()), rint(sign.getY()), sign.getWorld().getName());
+                chest invent = new chest(grave,player.getName(),rint(nb.getX()),rint(nb.getZ()), rint(nb.getY()), nb.getWorld().getName());
                 inventorys.add(invent);
                 event.getDrops().clear(); 
             }
@@ -105,6 +123,7 @@ public class GraveListener
                 public void run()
                 {
                     nb.getLocation().getBlock().setType(Material.AIR);
+                    nb2.getLocation().getBlock().setType(Material.AIR);
                     player.sendMessage(formatMsg.format(conf.getStringYAML("messages.yml", "graveDespawn"),player));
                     if (GraveListener.inventorys.size() > 0)
                     {
@@ -119,22 +138,23 @@ public class GraveListener
     public void onGraveInteract(PlayerInteractEvent event)
     {
         final Player player = (Player) event.getPlayer();
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getState() instanceof Sign)
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType().equals(BEDROCK))
         {
             if (player.hasPermission("iris.grave"))
             {
-                Sign sign = (Sign) event.getClickedBlock().getState();
-                if (sign.getLine(0) == null ? formatMsg.format(conf.getStringYAML("messages.yml", "graveLine1"), event.getPlayer()) == null : sign.getLine(0).contains(formatMsg.format(conf.getStringYAML("messages.yml", "graveLine1"), event.getPlayer())))
-                {
+                Block b = event.getClickedBlock();
+                //Sign sign = (Sign) event.getClickedBlock().getState();
+                //if (sign.getLine(0) == null ? formatMsg.format(conf.getStringYAML("messages.yml", "graveLine1"), event.getPlayer()) == null : sign.getLine(0).contains(formatMsg.format(conf.getStringYAML("messages.yml", "graveLine1"), event.getPlayer())))
+                //{
                     for(chest grave : inventorys)
                     {
-                        if (grave.locationX == rint(sign.getLocation().getBlockX()) && grave.locationZ == rint(sign.getLocation().getBlockZ()))
+                        if (grave.locationX == rint(b.getLocation().getBlockX()) && grave.locationZ == rint(b.getLocation().getBlockZ()))
                         {
 
                             player.openInventory(grave.grave);
                         }
                     }               
-                }
+                //}
             }
             else
             {

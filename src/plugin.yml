@@ -195,6 +195,7 @@ commands:
     usage: |
            /<command> add [parcelleName] - Enregistre la parcelle
            /<command> addplayer [joueur] - Ajoute un habitant sur la parcelle
+           /<command> delplayer [parcelle] [joueur] - supprime un habitant sur la parcelle
            /<command> avendre [prix] - Pose un panneaux de vente de la parcelle
            /<command> reload - Recharge les donnees parcelle
   world:
