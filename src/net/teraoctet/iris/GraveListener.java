@@ -12,7 +12,6 @@ import static org.bukkit.Material.BEDROCK;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,7 +22,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.SkullMeta;
 
 public class GraveListener
   implements Listener
@@ -56,41 +54,17 @@ public class GraveListener
             /*  Création du panneaux */
             Location location = player.getLocation();
             location.setY(rint(location.getY()));
-            location = controlBlock(location);
+            location = controlBlock(location.add(0, -1, 0));
             World newBlock = location.getWorld();
             final Block nb = newBlock.getBlockAt(location);
             final Block nb2 = nb.getRelative(0, 1, 0);
-                           
-            /*if (nb.isLiquid())
-            {
-                player.sendMessage(formatMsg.format(conf.getStringYAML("messages.yml", "graveOnLiquid"),player));
-                return;
-            }
-            
-            if (player.isFlying())
-            {
-                player.sendMessage(formatMsg.format(conf.getStringYAML("messages.yml", "graveOnFlying"),player));
-                return;
-            }*/
             
             player.sendMessage(formatMsg.format(conf.getStringYAML("messages.yml", "graveSpawn"),player));
             player.sendMessage(formatMsg.format("<aqua>Trouve ta tombe represente par un block de bedrock et fait un click droit dessus pour reprendre ton stuff"));
+            player.sendMessage(formatMsg.format("<yellow>position de ta tombe : xyz  " + nb.getLocation().getBlockX() + " " + nb.getLocation().getBlockY() + " " + + nb.getLocation().getBlockZ()));
             
             try
-            {
-                /*nb.setType(Material.SIGN_POST);            
-                String playerName = player.getName();
-                Sign sign = (Sign)nb.getState();
-
-                String Line1 = formatMsg.format(conf.getStringYAML("messages.yml", "graveLine1"), player);
-                String Line3 = formatMsg.format(conf.getStringYAML("messages.yml", "graveLine3"), player);
-                String Line4 = formatMsg.format(conf.getStringYAML("messages.yml", "graveLine4"), player);
-                sign.setLine(0, Line1);
-                sign.setLine(1, playerName);
-                sign.setLine(2, Line3);
-                sign.setLine(3, Line4);
-                sign.update();*/
-                
+            {                
                 nb.setType(Material.BEDROCK);            
                 nb2.setType(Material.SIGN_POST);            
                 String playerName = player.getName();
@@ -130,7 +104,7 @@ public class GraveListener
                         inventorys.remove(0);
                     }
                 }
-            }, 5000);
+            }, 10000);
         }
     }
        
@@ -143,18 +117,13 @@ public class GraveListener
             if (player.hasPermission("iris.grave"))
             {
                 Block b = event.getClickedBlock();
-                //Sign sign = (Sign) event.getClickedBlock().getState();
-                //if (sign.getLine(0) == null ? formatMsg.format(conf.getStringYAML("messages.yml", "graveLine1"), event.getPlayer()) == null : sign.getLine(0).contains(formatMsg.format(conf.getStringYAML("messages.yml", "graveLine1"), event.getPlayer())))
-                //{
-                    for(chest grave : inventorys)
+                for(chest grave : inventorys)
+                {
+                    if (grave.locationX == rint(b.getLocation().getBlockX()) && grave.locationZ == rint(b.getLocation().getBlockZ()))
                     {
-                        if (grave.locationX == rint(b.getLocation().getBlockX()) && grave.locationZ == rint(b.getLocation().getBlockZ()))
-                        {
-
-                            player.openInventory(grave.grave);
-                        }
-                    }               
-                //}
+                        player.openInventory(grave.grave);
+                    }
+                }               
             }
             else
             {
@@ -174,7 +143,6 @@ public class GraveListener
                 grave.addItem(new ItemStack[] { item });
             }
         }
-        //grave.addItem(player.getEquipment().getArmorContents());
         players_inventory.clear();
         player.getEquipment().clear();
     }
@@ -190,17 +158,21 @@ public class GraveListener
             World worldInstance = Bukkit.getWorld(grave.world);
             Location location = new Location(worldInstance, X, Y, Z);
             Block block = worldInstance.getBlockAt(location);
-            block.setTypeId(0);
+            block.setType(Material.AIR);
         }  
         inventorys.removeAll(inventorys);
     }
     
     public Location controlBlock(Location location)
     {                
-        if (location.getBlock().getTypeId() != 0)
+        if (!location.getBlock().getType().equals(Material.AIR) 
+                && !location.add(0, 1, 0).getBlock().getType().equals(Material.AIR) 
+                && !location.getBlock().getType().equals(Material.SNOW))
         {
             location.setY(location.getY()+1);
-            if (location.getBlock().getTypeId() == 0)
+            if (!location.getBlock().getType().equals(Material.AIR) 
+                && !location.add(0, 1, 0).getBlock().getType().equals(Material.AIR) 
+                && !location.getBlock().getType().equals(Material.SNOW))
             {
                 return location;
             }
@@ -208,7 +180,9 @@ public class GraveListener
             {
                 location.setY(location.getY()-1);
                 location.setX(location.getX()+1);
-                if (location.getBlock().getTypeId() == 0)
+                if (!location.getBlock().getType().equals(Material.AIR) 
+                    && !location.add(0, 1, 0).getBlock().getType().equals(Material.AIR) 
+                    && !location.getBlock().getType().equals(Material.SNOW))
                 {
                     return location;
                 }
@@ -216,7 +190,9 @@ public class GraveListener
                 {
                     location.setX(location.getX()-1);
                     location.setZ(location.getZ()+1);
-                    if (location.getBlock().getTypeId() == 0)
+                    if (!location.getBlock().getType().equals(Material.AIR) 
+                        && !location.add(0, 1, 0).getBlock().getType().equals(Material.AIR) 
+                        && !location.getBlock().getType().equals(Material.SNOW))
                     {
                         return location;
                     }
@@ -224,7 +200,9 @@ public class GraveListener
                     {
                         location.setX(location.getX()-1);
                         location.setZ(location.getZ()-1);
-                        if (location.getBlock().getTypeId() == 0)
+                        if (!location.getBlock().getType().equals(Material.AIR) 
+                            && !location.add(0, 1, 0).getBlock().getType().equals(Material.AIR) 
+                            && !location.getBlock().getType().equals(Material.SNOW))
                         {
                             return location;
                         }
@@ -232,7 +210,9 @@ public class GraveListener
                         {
                             location.setX(location.getX()+1);
                             location.setZ(location.getZ()-1);
-                            if (location.getBlock().getTypeId() == 0)
+                            if (!location.getBlock().getType().equals(Material.AIR) 
+                                && !location.add(0, 1, 0).getBlock().getType().equals(Material.AIR) 
+                                && !location.getBlock().getType().equals(Material.SNOW))
                             {
                                 return location;
                             }

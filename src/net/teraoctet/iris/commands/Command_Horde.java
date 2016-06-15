@@ -39,7 +39,7 @@ public class Command_Horde implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     { 
         Player player = (Player)sender;
-        if(!player.hasPermission("iris.horde")) return true;
+        //if(!player.hasPermission("iris.horde")) return true;
         if(commandLabel.equalsIgnoreCase("horde") || commandLabel.equalsIgnoreCase("h"))
         {
             if((args.length == 0 || args[0].equalsIgnoreCase("1") || args[0].equalsIgnoreCase("2") || args[0].equalsIgnoreCase("3") || args[0].equalsIgnoreCase("4")) && player.hasPermission("iris.horde"))
@@ -478,7 +478,7 @@ public class Command_Horde implements CommandExecutor
                 Invits.remove(index);
                 return true;
             }
-            if (args[0].equalsIgnoreCase("tag") && player.hasPermission("iris.horde"))
+            if (args[0].equalsIgnoreCase("tag") && player.hasPermission("iris.horde.tag"))
             {   
                 player.setPassenger(player.getWorld().spawn(player.getLocation(), Snowball.class));
                 return true;

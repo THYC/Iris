@@ -516,7 +516,7 @@ implements Listener
         Parcelle parcelle = parcelleManager.getParcelle(event.getEntity().getLocation());
         if (parcelle != null)
         {
-            if (parcelle.getName().contains("|off|")) return;
+            if (!parcelle.getName().contains("|protect|")) return;
             if (parcelle.getJail() == 1) return;
             if (event.getEntity() instanceof org.bukkit.entity.Player && event instanceof EntityDamageByEntityEvent) 
             {
@@ -793,12 +793,19 @@ implements Listener
     }
     
     @EventHandler
+    public void onBreakFrame(EntityDamageEvent event)
+    {
+        //Bukkit.getConsoleSender().sendMessage(event.getEntityType().name());
+        //Bukkit.getConsoleSender().sendMessage(event.getCause().name());
+    }
+    
+    @EventHandler
     public void onBreakFrame(EntityDamageByEntityEvent event)
     {
+        //Bukkit.getConsoleSender().sendMessage(event.getDamager().getName());
         try
         {
             Player player = (Player) event.getDamager();
-            
             Parcelle parcelle = parcelleManager.getParcelle(event.getEntity().getLocation());
             if (parcelle.getName().contains("|off|")) return;
             if (parcelle == null || parcelle.getOwner().contains(player.getUniqueId().toString()) || parcelle.getNoBreak() == 0 || player.isOp())
